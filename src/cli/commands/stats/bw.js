@@ -27,25 +27,19 @@ module.exports = {
   },
 
   handler (argv) {
-    argv.ipfs.stats.bw({
+    const stream = argv.ipfs.stats.bwReadableStream({
       peer: argv.peer,
       proto: argv.proto,
       poll: argv.poll,
       interval: argv.interval
-    }, (err, stream) => {
-      if (err) {
-        throw err
-      }
+    })
 
-      stream.once('data', function (stats) {
-        console.log(stats)
-          
-        print(`bandwidth status
+    stream.once('data', function (stats) {          
+      print(`bandwidth status
   total in: ${stats.totalIn}B
   total out: ${stats.totalOut}B
   rate in: ${stats.rateIn}B/s
   rate out: ${stats.rateOut}B/s`)
-      })
     })
   }
 }
